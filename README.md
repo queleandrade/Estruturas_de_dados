@@ -119,5 +119,5 @@ X = 21
  
  ## Questão 2:
  
- A resposta está no códido Estrutura_de_dados1.ccp
+ A resposta está no códido Atividade_Estruturada1.ccp
  
