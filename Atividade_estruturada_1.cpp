@@ -7,13 +7,13 @@ using namespace std;
 void inserirSemRepetir(int v[], int valor, int &n, int tamanho);
 int buscaSequencial (int v[], int valor, int n);
 void listar(int v[], int n);
-void intercalar(int v[], int qtd_v, int y[], int qtd_y, int z[], int qtd_z);
+void intercalar(int v[], int qtd_v, int y[], int qtd_y, int z[], int &n);
 bool intersecao (int v[], int y[], int qtd_v, int qtd_y, int &n, int inter[]);
 void uniao (int v[], int y[], int uni[], int qtd_v, int qtd_y, int &n);
 void removerPeloIndice( int uni[], int &qtd_uni, int indice);
 
 int main (void){
-    int valor,  v[TAM],  y[TAM], z[TAM*2], inter[TAM], uni[2*TAM], n, qtd_z, qtd_v,  qtd_y, qtd_uni, indice; //quantidade de valores existentes na lista (qtd_v e qtd_y)
+    int valor,  v[TAM],  y[TAM], z[TAM*2], inter[TAM], uni[2*TAM], n, qtd_z, qtd_v,  qtd_y, qtd_uni, qtd_inter, indice; //quantidade de valores existentes na lista (qtd_v e qtd_y)
     
 
     //inicializando a quantidade de valores existentes na lista
@@ -74,12 +74,19 @@ int main (void){
     cout << "\nLista 3:";
     listar(z, qtd_z);
     
-    cout << "\n\n*** Interseção a lista 1 e 2, em um nova lista 4 ***\n\n"; 
-    intersecao(v, y, qtd_v, qtd_y, n, inter);
+    cout << "\n\n*** Intersecao a lista 1 e 2, em um nova lista 4 ***\n\n"; 
+    qtd_inter = 0;
+    bool comuns = intersecao(v, y, qtd_v, qtd_y, qtd_inter, inter);
     cout << "\nLista 4:";
-    listar(inter, n);
+    if(comuns){
+    	listar(inter, qtd_inter);
+	}
+	else{
+		cout << "\nNao houve intersecao";
+	}
     
-    cout << "\n\n*** União a lista 1 e 2, em um nova lista 5 ***\n\n"; 
+    
+    cout << "\n\n*** Uniao a lista 1 e 2, em um nova lista 5 ***\n\n"; 
     uniao(v, y, uni, qtd_v, qtd_y, qtd_uni);
     if(qtd_uni != 0){ //caso exista união, mostra na tela
     	cout << "\nLista 5: ";
@@ -146,26 +153,12 @@ void listar(int v[], int n){
 }
 
 //intercalando as listas e gerando uma nova intercalada para qualquer tamanho de lista
-void intercalar(int v[], int qtd_v, int y[], int qtd_y, int z[], int qtd_z){
+void intercalar(int v[], int qtd_v, int y[], int qtd_y, int z[], int &n){
 	int i, j;
 	for (i = 0; i < qtd_v && i < qtd_y; i++){
-		z[i] = v[i]; //1ª posição do vetor vazia, adiciona o primeiro elemento de v
-		z[i + 1] = y[i]; //2ª posição do vetor vazia, adiciona o segundo elemento de y
-		qtd_z+=2;  //incrementa em 2 em 2, pois adiciona dois valores a cada loop
-	}
-	
-	if (i == qtd_y){
-		for (int j = qtd_z; i < qtd_v; j++, i++){
-			z[j] = v[i];
-			qtd_z++;
-		}
-	}
-	
-	if (i == qtd_v){
-		for (j = qtd_z; i < qtd_y; i++, j++){
-			z[j] = y[i];
-			qtd_z++;
-		}
+		z[i*2] = v[i]; //1ª posição do vetor vazia, adiciona o primeiro elemento de v, sempre vai duplicando o incice de z para armazenar intercalado
+		z[i*2 + 1] = y[i]; //2ª posição do vetor vazia, adiciona o segundo elemento de y
+		n+=2;  //incrementa em 2 em 2, pois adiciona dois valores a cada loop
 	}	
 }
 
@@ -182,7 +175,7 @@ bool intersecao (int v[], int y[], int qtd_v, int qtd_y, int &n, int inter[]){
 			}
 		}
 	}
-	//return comuns;
+	return comuns;
 }
 
 //união das listas geradas e não repete os números existentes em comum nas listas
