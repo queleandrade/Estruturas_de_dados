@@ -1,0 +1,139 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+
+int enfileirar(int v[], int &fim, int &num, int valor);
+int desenfileirar(int v[], int &ini, int fim, int &num, int &valor);
+int inverte(int v[], int ini, int fim);
+void imprimir(int v[], int tam);
+int par(int pares[], int TAM, int &num);
+int impar(int impares[], int TAM, int &num);
+
+int main(void) {
+    // Declara a fila
+    int fila[MAX];
+    int ini = 0;
+    int fim = -1;
+    int nfila = 0;
+
+    // Variável para armazenar dado digitado
+    int dado, dado2;
+    // Variável que indica se acabaram valores da fila
+    int vazia;
+
+    // Lê valores e os enfileira, se forem >= 0
+    do {
+        cout << "Digite um numero inteiro a enfileirar (0 desenfileira um número, -1 termina): ";
+        cin >> dado;
+        if (dado >0) enfileirar(fila, fim, nfila, dado);
+        else if(dado==0) desenfileirar(fila, ini, fim, nfila, dado2);
+        } while(dado >= 0);
+
+    // Agora mostra valores da pilha até que eles acabem...
+    do {
+        vazia = desenfileirar(fila, ini, fim, nfila, dado);
+        if (vazia == 0) cout << dado << endl;
+    } while (vazia == 0);
+    
+    cout << "*************invertendo**************";
+    inverte(fila, 0, 9);
+    imprimir(fila, 10);
+    
+    par(fila, 10, dado);
+    impar(fila, 10, dado);
+    
+}
+
+// Enfileira um valor
+// Entrada:
+//  v: vetor com elementos da fila
+//  fim: fim da fila
+//  num: número de elementos atuais
+//  valor: valor a ser enfileirado
+// Retorna:
+//  1- Se fila cheia
+//  0- Caso contrário
+int enfileirar(int v[], int &fim, int &num, int valor) {
+    // Se a fila está cheia... retorna 1
+    if (num==MAX) {
+        cout << "ERRO: Fila cheia!" << endl;
+        return 1;
+    }
+    // Se fila não está cheia, vamos enfileirar
+    fim = fim + 1;
+    if (fim>=MAX) fim = fim - MAX;
+    v[fim] = valor;
+    num = num + 1;
+    // Indica que valor foi enfileirado
+    return 0;
+}
+
+
+// Desenfileira um valor
+// Entrada:
+//  v: vetor com elementos da fila
+//  ini: inicio da fila
+//  fim: final da fila
+//  num: número de elementos atuais
+//  valor: Local a colocar valor desenfileirado
+// Retorna:
+//  valor: valor desenfileirado
+//  1- Se fila vazia
+//  0- Caso contrário
+int desenfileirar(int v[], int &ini, int fim, int &num, int &valor) {
+    // Se a fila está vazia... retorna 1
+    if (num == 0) {
+        cout << "ERRO: Fila vazia!" << endl;
+        return 1;
+    }
+    // Se fila não está vazia, vamos desenfileirar
+    valor = v[ini];
+    ini = ini + 1;
+    if (ini >= MAX) ini = ini - MAX;
+    num = num - 1;
+    // Indica que valor foi desenfileirado
+    return 0;
+}
+
+
+int inverte(int v[], int ini, int fim){
+    int aux;
+    if(ini < fim){
+        aux = v[ini];
+        v[ini] = v[fim];
+        v[fim] = aux;
+        inverte(v, ini + 1, fim - 1);
+    }
+}
+
+void imprimir(int v[], int tam){
+    if(tam == 1)
+    	cout << v[tam - 1] << endl;
+    else{
+        imprimir(v, tam - 1);
+        cout << v[tam - 1] << endl;
+    }
+}
+
+int par(int pares[], int TAM, int &num){
+	int par = 0;
+	for ( int i=0; i < TAM; i++){
+        if (num % 2 == 0){
+            pares[i] = num;
+            par++;
+        }
+    }
+	return par;
+}
+
+int impar(int impares[], int TAM, int &num){
+	int impar = 0;
+	for ( int i=0; i < TAM; i++){
+        if (num % 2 != 0){
+            impares[i] = num;
+        	impar++;
+        }
+	}
+	return impar;
+}
