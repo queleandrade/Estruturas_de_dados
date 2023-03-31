@@ -7,8 +7,8 @@ int enfileirar(int v[], int &fim, int &num, int valor);
 int desenfileirar(int v[], int &ini, int fim, int &num, int &valor);
 int inverte(int v[], int ini, int fim);
 void imprimir(int v[], int tam);
-int par(int pares[], int TAM, int &num);
-int impar(int impares[], int TAM, int &num);
+int impar(int v[], int tam);
+int par(int v[], int tam);
 
 int main(void) {
     // Declara a fila
@@ -40,7 +40,8 @@ int main(void) {
     inverte(fila, 0, 9);
     imprimir(fila, 10);
     
-    parimpar(fila, 10);
+    impar(fila, 10);
+    par(fila, 10);
     
 }
 
@@ -115,7 +116,7 @@ void imprimir(int v[], int tam){
     }
 }
 
-int parImpar(int v[], int tam) {
+int impar(int v[], int tam) {
     int inicio = 0;  //indice do primeiro elemento da fila
     int ultimo = tam - 1; //indice do ultimo elemento da fila
     int imparcont = 0; //inicializada como zero e é incrementada toda vez que um elemento ímpar é encontrado.
@@ -136,8 +137,35 @@ int parImpar(int v[], int tam) {
         inicio++;
         ultimo++;
     }
-    return odd_count;
+    return imparcont;
 }
+
+
+int par(int v[], int tam) {
+    int inicio = 0;  //indice do primeiro elemento da fila
+    int ultimo = tam - 1; //indice do ultimo elemento da fila
+    int parcont = 0; //inicializada como zero e é incrementada toda vez que um elemento ímpar é encontrado.
+    while (inicio <= ultimo) {
+        if (v[inicio] % 2 == 0) { //verificando se o primeiro elemento da fila é ímpar
+            parcont++;        //incrementa
+        }
+        inicio++;
+        if (inicio > ultimo) { //se o laço anterior não for interrompido, o próximo elemento da fila é removido do início da fila e armazenado na variável
+            break;
+        }
+        int fila = v[inicio];
+	    //as variaveis inicio e ultimo vão ser sempre atualizadas para indicar uma nova posição
+        for (int i = inicio; i > 0; i--) {  
+            v[i] = v[i - 1];
+        }
+        v[0] = fila;
+        inicio++;
+        ultimo++;
+    }
+    return parcont;
+}
+
+
 
 // int par(int pares[], int TAM, int &num){
 // 	int par = 0;
